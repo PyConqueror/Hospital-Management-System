@@ -13,13 +13,11 @@ class CustomUser(AbstractUser):
 class Patient(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='patient_profile')
     name = models.CharField(max_length=255)
-    date_of_birth = models.DateField()
-    gender = models.CharField(max_length=10)
-    address = models.TextField()
-    phone_number = models.CharField(max_length=15)
-    email = models.EmailField()
-    emergency_contact = models.TextField()
-    medical_history = models.TextField()
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=10, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    emergency_contact = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -40,8 +38,8 @@ class Doctor(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='doctor_profile')
     name = models.CharField(max_length=255)
     specialization = models.CharField(max_length=100, choices=SPECIALIZATIONS)
-    years_of_experience = models.IntegerField()
-    contact_information = models.TextField()
+    years_of_experience = models.IntegerField(null=True, blank=True)
+    contact_information = models.TextField(null=True, blank=True)
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('valid', 'Valid'),
