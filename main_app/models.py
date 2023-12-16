@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     ROLES = [
-        ('admin', 'Admin'),
+        ('manager', 'Manager'),
         ('doctor', 'Doctor'),
         ('patient', 'Patient'),
     ]
@@ -18,6 +18,7 @@ class Patient(models.Model):
     address = models.TextField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     emergency_contact = models.TextField(null=True, blank=True)
+    medical_history = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -50,20 +51,24 @@ class Doctor(models.Model):
     def __str__(self):
         return self.name
     
+from django.db import models
+
 class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='doctor_appointments')
-    date_and_time = models.DateTimeField()
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='doctor_appointments')  # Allow null for doctor
+    date_and_time = models.DateTimeField(null=True, blank=True) 
     purpose = models.TextField()
     STATUS_CHOICES = [
+        ('pending', 'Pending'),
         ('scheduled', 'Scheduled'),
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled'),
     ]
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='scheduled')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
 
     def __str__(self):
-        return f"{self.doctor.name} - {self.date_and_time.strftime('%Y-%m-%d %H:%M')}"
+        return f"{self.patient.user.get_full_name()} - Status: {self.status}"
+
     
 class MedicalRecords(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medical_records')
