@@ -6,8 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import CustomUser, Patient, Doctor, Appointment
-from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm
-
+from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm
 
 def home(request):
     return render(request, 'home.html')
@@ -16,11 +15,11 @@ def home(request):
 def set_dashboard(request):
     user_role = request.user.role
     if user_role == 'doctor':
-        return render(request, 'doctor/index.html')
+        return redirect('doctor_dashboard')
     elif user_role == 'patient':
-        return render(request, 'patient/index.html')
+        return redirect('patient_dashboard')
     elif user_role == 'manager':
-        return render(request, 'manager/index.html')
+        return redirect('manager_dashboard')
 
 @login_required
 def patient_dashboard(request):
@@ -107,15 +106,15 @@ def doctor_signup(request):
 class AppointmentRequest(CreateView):
     model = Appointment
     form_class = AppointmentRequestForm
-    template_name = 'patients/appointment_request_form.html'
+    template_name = 'appointments/appointment_request_form.html'
 
     def form_valid(self, form):
         form.instance.patient = self.request.user.patient_profile
-        form.instance.status = 'pending'  # Set the initial status to pending
+        form.instance.status = 'pending'  # set the initial status to pending
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('patient_dashboard')  # Redirect to the patient dashboard after successful submission
+        return reverse_lazy('patient_dashboard')  #redirect to the patient dashboard after successful submission
     
 class AppointmentDetail(DetailView):
     model = Appointment
@@ -129,3 +128,24 @@ class AppointmentUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('appointment_detail', kwargs={'pk': self.object.pk})
+
+class PatientProfile(DetailView):
+    model = Patient
+    template_name = 'patient/patient_profile.html'
+    context_object_name = 'profile'
+
+    # profile = Patient.
+
+    def get_object(self):
+        return self.request.user.patient_profile
+    
+class PatientProfileUpdate(UpdateView):
+    model = Patient
+    form_class = PatientProfileForm
+    template_name = 'patient/patient_profile_edit.html'
+    
+    def get_object(self):
+        return self.request.user.patient_profile
+
+    def get_success_url(self):
+        return reverse_lazy('patient_profile')
