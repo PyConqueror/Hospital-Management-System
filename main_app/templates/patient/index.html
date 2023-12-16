@@ -30,7 +30,7 @@
     <div class="col s12">
       <form method="post" action="{% url 'appointment_request_create' %}">
         {% csrf_token %}
-        {{ appointment_request_form.as_p }}
+        {{ appointment_request_form }}
         <button type="submit" class="btn">Submit Request</button>
       </form>
     </div>

@@ -20,6 +20,7 @@
                 </ul>
                 <ul class="right">
                     <li><a href="{% url 'patient_dashboard' %}">Main</a></li>
+                    <li><a href="{% url 'patient_profile' %}">Account Profile</a></li>
                     <li>
                         <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}

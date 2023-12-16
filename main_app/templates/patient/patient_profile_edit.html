@@ -1,0 +1,21 @@
+{% extends 'patient/base.html' %}
+
+{% block content %}
+  <h2>Edit Profile</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Update Profile</button>
+  </form>
+  <script>
+    const dateElement = document.getElementById('id_date_of_birth');
+    M.Datepicker.init(dateElement, {
+      format: 'yyyy-mm-dd',
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    });
+    const selectElement = document.getElementById('id_gender');
+    M.FormSelect.init(selectElement);
+  </script>
+{% endblock %}
