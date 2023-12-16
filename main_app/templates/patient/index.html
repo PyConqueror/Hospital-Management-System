@@ -1,11 +1,42 @@
 {% extends 'patient/base.html' %}
 {% block content %}
 
-<h1>PATIENT DASHBOARD</h1>
+<h1>Patient Dashboard</h1>
 <hr>
 
-<p>See current appointments</p>
-<p>make a new appointment</p>
+<div class="row">
+  <h2>Current Appointments</h2>
+  {% for appointment in current_appointments %}
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">{{ appointment.doctor.name }}</span>
+          <p>Date and Time: {{ appointment.date_and_time }}</p>
+          <p>Purpose: {{ appointment.purpose|linebreaks }}</p>
+          <p>Status: {{ appointment.status }}</p>
+          <div class="card-action">
+            <a href="{% url 'appointment_detail' appointment.pk %}">Appointment Detail</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No current appointments.</p>
+  {% endfor %}
+</div>
+
+<div class="row">
+    <h2>Make a New Appointment Request</h2>
+    <div class="col s12">
+      <form method="post" action="{% url 'appointment_request_create' %}">
+        {% csrf_token %}
+        {{ appointment_request_form.as_p }}
+        <button type="submit" class="btn">Submit Request</button>
+      </form>
+    </div>
+  </div>
 
 
 {% endblock %}
+
+
