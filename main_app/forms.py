@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser
+from .models import CustomUser, Appointment
 
 class PatientSignUpForm(UserCreationForm):
     name = forms.CharField(max_length=255, help_text='Enter your full name')
@@ -36,3 +36,8 @@ class DoctorSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = UserCreationForm.Meta.fields + ('email', 'name', 'specialization', 'years_of_experience', 'contact_information',)
+
+class AppointmentRequestForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['purpose']
