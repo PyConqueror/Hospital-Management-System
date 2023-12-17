@@ -3,7 +3,8 @@
 {% block content %}
   <h2>Appointment Detail</h2>
   <p>Doctor: {{ appointment.doctor.name }}</p>
-  <p>Date and Time: {{ appointment.date_and_time }}</p>
+  <p>Date: {{ appointment.date }}</p>
+  <p>Time: {{ appointment.time }}</p>
   <p>Purpose: {{ appointment.purpose }}</p>
   <p>Status: {{ appointment.status }}</p>
   {% if request.user.patient_profile == appointment.patient %}
