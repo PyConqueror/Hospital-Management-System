@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='MedicalRecords',
+            name='MedicalRecord',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date_of_record', models.DateField()),
