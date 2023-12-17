@@ -71,7 +71,7 @@ class Appointment(models.Model):
         return f"{self.patient.user.get_full_name()} - Status: {self.status}"
 
     
-class MedicalRecords(models.Model):
+class MedicalRecord(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medical_records')
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='doctor_medical_records') 
     date_of_record = models.DateField()
