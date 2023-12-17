@@ -56,7 +56,8 @@ from django.db import models
 class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='doctor_appointments')  # Allow null for doctor
-    date_and_time = models.DateTimeField(null=True, blank=True) 
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
     purpose = models.TextField()
     STATUS_CHOICES = [
         ('pending', 'Pending'),
