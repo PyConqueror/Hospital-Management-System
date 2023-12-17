@@ -1,0 +1,25 @@
+{% extends 'manager/base.html' %}
+
+{% block content %}
+  <h2>Edit Appointment</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Update</button>
+  </form>
+  <script>
+    const dateElement = document.getElementById('id_date');
+    M.Datepicker.init(dateElement, {
+      format: 'yyyy-mm-dd',
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    });
+    const timeElement = document.getElementById('id_time');
+    M.Timepicker.init(timeElement, { twelveHour: false });
+    const selectElement = document.getElementById('id_doctor');
+    M.FormSelect.init(selectElement);
+    const StatusElement = document.getElementById('id_status');
+    M.FormSelect.init(StatusElement);
+  </script>
+{% endblock %}
