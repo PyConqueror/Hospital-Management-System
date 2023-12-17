@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, Appointment, Patient
+from .models import CustomUser, Appointment, Patient, Doctor
 
 class PatientSignUpForm(UserCreationForm):
     name = forms.CharField(max_length=255, help_text='Enter your full name')
@@ -46,3 +46,18 @@ class PatientProfileForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['name', 'date_of_birth', 'gender', 'address', 'phone_number', 'emergency_contact']
+
+class AppointmentEditForm(forms.ModelForm):
+    doctor = forms.ModelChoiceField(
+        queryset=Doctor.objects.all(),
+        label="Doctor",
+        to_field_name="id", 
+    )
+
+    class Meta:
+        model = Appointment
+        fields = ['doctor', 'date', 'time', 'status']
+
+    def __init__(self, *args, **kwargs):
+        super(AppointmentEditForm, self).__init__(*args, **kwargs)
+        self.fields['doctor'].label_from_instance = lambda obj: f"Dr. {obj.name} ({obj.specialization})"
