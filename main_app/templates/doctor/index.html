@@ -1,11 +1,53 @@
 {% extends 'doctor/base.html' %}
 {% block content %}
 
-<h1>DOCTOR MAIN PAGE DASHBOARD</h1>
+<h1>Doctor Dashboard</h1>
 <hr>
 
-<p>See appointments as cards and select appointments lead to other page</p>
-<p></p>
+<div class="row">
+  <h2>Scheduled Appointments</h2>
+  {% for appointment in scheduled_appointments %}
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">{{ appointment.patient.name}}</span>
+          {% if appointment.date and appointment.time %}
+            <p>Date and Time: {{ appointment.date|date:"Y-m-d" }} at {{ appointment.time|time:"H:i" }}</p>
+          {% endif %}
+          <p>Purpose: {{ appointment.purpose }}</p>
+          <p>Status: {{ appointment.status }}</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'doctor_appointment_edit' appointment.pk %}">Change Appointment Status</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No scheduled appointments.</p>
+  {% endfor %}
+</div>
 
-
+<div class="row">
+    <h2>Completed Appointments</h2>
+    {% for appointment in completed_appointments %}
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">{{ appointment.patient.name }}</span>
+            {% if appointment.date and appointment.time %}
+              <p>Date and Time: {{ appointment.date|date:"Y-m-d" }} at {{ appointment.time|time:"H:i" }}</p>
+            {% endif %}
+            <p>Purpose: {{ appointment.purpose }}</p>
+            <p>Status: {{ appointment.status }}</p>
+          </div>
+          <div class="card-action">
+            <a href="{% url 'medical_record_create' appointment.pk %}">Submit Medical Record</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No completed appointments.</p>
+    {% endfor %}
+  </div>
+  
 {% endblock %}
