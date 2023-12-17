@@ -6,7 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import CustomUser, Patient, Doctor, Appointment
-from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm
+from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm, AppointmentEditForm
 
 def home(request):
     return render(request, 'home.html')
@@ -38,16 +38,23 @@ def patient_dashboard(request):
 @login_required
 def doctor_dashboard(request):
     user_role = request.user.role
-    if user_role == 'patient': 
-        return render(request, 'patient/index.html')
+    if user_role == 'doctor': 
+        return render(request, 'doctor/index.html')
     else: 
         return redirect('dashboard')
 
-@login_required
 def manager_dashboard(request):
     user_role = request.user.role
     if user_role == 'manager':
-        return render(request, 'manager/index.html')
+        appointment_requests = Appointment.objects.filter(status='pending').order_by('-date')
+        past_appointments = Appointment.objects.exclude(status='pending').order_by('-date')
+        doctors = Doctor.objects.all()
+        context = {
+            'appointment_requests': appointment_requests,
+            'past_appointments': past_appointments,
+            'doctors': doctors,
+        }
+        return render(request, 'manager/index.html', context)
     else: 
         return redirect('dashboard')
 
@@ -149,3 +156,11 @@ class PatientProfileUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('patient_profile')
+
+class ManagerAppointmentEdit(UpdateView):
+    model = Appointment
+    form_class = AppointmentEditForm
+    template_name = 'appointments/manager_appointment_edit_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('manager_dashboard')
