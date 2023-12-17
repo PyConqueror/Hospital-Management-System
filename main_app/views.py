@@ -1,12 +1,12 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic.edit import CreateView
 from django.views.generic import DetailView, UpdateView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import CustomUser, Patient, Doctor, Appointment
-from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm, AppointmentEditForm
+from .models import Patient, Doctor, Appointment, MedicalRecord
+from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm, AppointmentEditForm, AppointmentStatusUpdateForm, MedicalRecordForm
 
 def home(request):
     return render(request, 'home.html')
@@ -35,12 +35,23 @@ def patient_dashboard(request):
     else: 
         return redirect('dashboard')
 
-@login_required
 def doctor_dashboard(request):
     user_role = request.user.role
-    if user_role == 'doctor': 
-        return render(request, 'doctor/index.html')
-    else: 
+    if user_role == 'doctor':
+        scheduled_appointments = Appointment.objects.filter(  #show only the scheduled appointments for the logged in doctor
+            doctor=request.user.doctor_profile, 
+            status='scheduled'
+        ).order_by('-date')
+        completed_appointments = Appointment.objects.filter(
+            doctor=request.user.doctor_profile, 
+            status='completed'
+        ).order_by('-date')
+        context = {
+            'scheduled_appointments': scheduled_appointments,
+            'completed_appointments': completed_appointments,
+        }
+        return render(request, 'doctor/index.html', context)
+    else:
         return redirect('dashboard')
 
 def manager_dashboard(request):
@@ -141,8 +152,6 @@ class PatientProfile(DetailView):
     template_name = 'patient/patient_profile.html'
     context_object_name = 'profile'
 
-    # profile = Patient.
-
     def get_object(self):
         return self.request.user.patient_profile
     
@@ -164,3 +173,29 @@ class ManagerAppointmentEdit(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('manager_dashboard')
+    
+class DoctorAppointmentEdit(UpdateView):
+    model = Appointment
+    form_class = AppointmentStatusUpdateForm
+    template_name = 'appointments/doctor_appointment_edit_form.html'
+
+    def get_queryset(self):
+        return Appointment.objects.filter(doctor=self.request.user.doctor_profile)
+
+    def get_success_url(self):
+        return reverse_lazy('doctor_dashboard')
+    
+class MedicalRecordCreate(CreateView):
+    model = MedicalRecord
+    form_class = MedicalRecordForm
+    template_name = 'doctor/new_medical_record_form.html'
+
+    def form_valid(self, form):
+        form.instance.appointment = Appointment.objects.get(pk=self.kwargs['pk']) #set the patient and doctor automatically based on the appointment
+        form.instance.patient = form.instance.appointment.patient
+        form.instance.doctor = self.request.user.doctor_profile
+        form.instance.date_of_record = timezone.now().date()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('doctor_dashboard') #redirect back to dr dashboard after medical record is created
