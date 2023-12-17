@@ -1,11 +1,58 @@
 {% extends 'manager/base.html' %}
 {% block content %}
 
-<h1>MANAGER MAIN PAGE DASHBOARD</h1>
+<h1>Manager Dashboard</h1>
 <hr>
 
-<p>See appointments as cards and select appointments lead to other page to edit and assign doctor</p>
-<p></p>
+<div class="row">
+  <h2>Appointment Requests</h2>
+  {% for appointment in appointment_requests %}
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Patient : {{ appointment.patient.name }}</span>
+          <p>Purpose: {{ appointment.purpose }}</p>
+          <p>Status: {{ appointment.status }}</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'manager_appointment_edit' appointment.id %}">Assign/Edit</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No appointment requests.</p>
+  {% endfor %}
+</div>
 
+<div class="row">
+  <h2>Past Appointments</h2>
+  {% for appointment in past_appointments %}
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            {% if appointment.doctor %}
+              Dr. {{ appointment.doctor.name }} ({{ appointment.doctor.specialization }})
+            {% else %}
+              Pending Doctor Assignment
+            {% endif %}
+          </span>
+          {% if appointment.date and appointment.time %}
+            <p>Date and Time: {{ appointment.date|date:"Y-m-d" }} at {{ appointment.time|time:"H:i" }}</p>
+          {% else %}
+            <p>Date and Time: Pending Appointment Time</p>
+          {% endif %}
+          <p>Purpose: {{ appointment.purpose }}</p>
+          <p>Status: {{ appointment.status }}</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'manager_appointment_edit' appointment.id %}">Edit</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No past appointments.</p>
+  {% endfor %}
+</div>
 
 {% endblock %}
