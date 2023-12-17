@@ -13,6 +13,7 @@ urlpatterns = [
     path('doctor/dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
     # path('doctor/my_patients/', views.my_patients, name='my_patients'),
     path('manager/dashboard/', views.manager_dashboard, name='manager_dashboard'),
+    path('manager/appointment/<int:pk>/edit/', views.ManagerAppointmentEdit.as_view(), name='manager_appointment_edit'),
     # path('manager/manage_doctors/', views.manage_doctors, name='manage_doctors'),
     # path('manager/appointment_requests/', views.appointment_requests, name='appointment_requests'),
     path('signup/patient/', views.patient_signup, name='patient_signup'),
