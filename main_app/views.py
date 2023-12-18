@@ -139,6 +139,21 @@ class AppointmentDetail(DetailView):
     template_name = 'appointments/appointment_detail.html'
     context_object_name = 'appointment'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['medical_records'] = self.object.appointment_medical_records.all()
+        return context
+    
+class DoctorAppointmentDetail(DetailView):
+    model = Appointment
+    template_name = 'appointments/doctor_appointment_detail.html'
+    context_object_name = 'appointment'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['medical_records'] = self.object.appointment_medical_records.all()
+        return context
+
 class AppointmentUpdate(UpdateView):
     model = Appointment
     form_class = AppointmentRequestForm
@@ -191,14 +206,16 @@ class MedicalRecordCreate(CreateView):
     template_name = 'doctor/new_medical_record_form.html'
 
     def form_valid(self, form):
-        form.instance.appointment = Appointment.objects.get(pk=self.kwargs['pk']) #set the patient and doctor automatically based on the appointment
-        form.instance.patient = form.instance.appointment.patient
-        form.instance.doctor = self.request.user.doctor_profile
+        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
+        form.instance.appointment = appointment
+        form.instance.patient = appointment.patient
+        form.instance.doctor = appointment.doctor
         form.instance.date_of_record = timezone.now().date()
         return super().form_valid(form)
-
+    
     def get_success_url(self):
-        return reverse_lazy('doctor_dashboard') #redirect back to dr dashboard after medical record is created
+        return reverse_lazy('appointment_detail', kwargs={'pk': self.kwargs['pk']})    #redirect to the detailed view of the appointment after creating the medical record
+
 
 def patient_medical_records(request):
     medical_records = MedicalRecord.objects.filter(patient=request.user.patient_profile).order_by('-date_of_record')
