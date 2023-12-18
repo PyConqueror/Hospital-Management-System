@@ -199,3 +199,12 @@ class MedicalRecordCreate(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('doctor_dashboard') #redirect back to dr dashboard after medical record is created
+
+def patient_medical_records(request):
+    medical_records = MedicalRecord.objects.filter(patient=request.user.patient_profile).order_by('-date_of_record')
+    return render(request, 'patient/records.html', {'medical_records': medical_records})
+
+class MedicalRecordDetail(DetailView):
+    model = MedicalRecord
+    template_name = 'patient/medical_record_detail.html'
+    context_object_name = 'record'
