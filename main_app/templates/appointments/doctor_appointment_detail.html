@@ -9,22 +9,25 @@
   <p>Status: {{ appointment.status }}</p>
   <a href="{% url 'medical_record_create' appointment.pk %}">Submit Medical Record</a>
   <h2>Medical Records for this Appointment:</h2>
-<div class="row">
-  {% for record in medical_records %}
-    <div class="col s12 m6">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">Record Date: {{ record.date_of_record|date:"Y-m-d" }}</span>
-          <p>Diagnosis: {{ record.diagnosis }}</p>
-          <p>Treatment: {{ record.treatment }}</p>
-          {% if record.prescriptions %}
-            <p>Prescriptions: {{ record.prescriptions }}</p>
-          {% endif %}
+  <div class="row">
+    {% for record in medical_records %}
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Record Date: {{ record.date_of_record|date:"Y-m-d" }}</span>
+            <p>Diagnosis: {{ record.diagnosis }}</p>
+            <p>Treatment: {{ record.treatment }}</p>
+            {% if record.prescriptions %}
+              <p>Prescriptions: {{ record.prescriptions }}</p>
+            {% endif %}
+          </div>
+          <div class="card-action">
+            <a href="{% url 'medical_record_edit' record.pk %}">Edit Medical Record</a> <!-- Link for editing the medical record -->
+          </div>
         </div>
       </div>
-    </div>
-  {% empty %}
-    <p>No medical records found for this appointment.</p>
-  {% endfor %}
-</div>
+    {% empty %}
+      <p>No medical records found for this appointment.</p>
+    {% endfor %}
+  </div>
 {% endblock %}
