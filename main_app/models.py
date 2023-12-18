@@ -74,6 +74,7 @@ class Appointment(models.Model):
 class MedicalRecord(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medical_records')
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='doctor_medical_records') 
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='appointment_medical_records',null=True, blank=True) 
     date_of_record = models.DateField()
     diagnosis = models.TextField()
     treatment = models.TextField()
