@@ -6,7 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Patient, Doctor, Appointment, MedicalRecord
-from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm, AppointmentEditForm, AppointmentStatusUpdateForm, MedicalRecordForm
+from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm, AppointmentEditForm, AppointmentStatusUpdateForm, MedicalRecordForm, MedicalRecordEditForm
 
 def home(request):
     return render(request, 'home.html')
@@ -59,10 +59,12 @@ def manager_dashboard(request):
     if user_role == 'manager':
         appointment_requests = Appointment.objects.filter(status='pending').order_by('-date')
         past_appointments = Appointment.objects.exclude(status='pending').order_by('-date')
+        scheduled_appointments = Appointment.objects.filter(status='scheduled').order_by('-date')
         doctors = Doctor.objects.all()
         context = {
             'appointment_requests': appointment_requests,
             'past_appointments': past_appointments,
+            'scheduled_appointments': scheduled_appointments,
             'doctors': doctors,
         }
         return render(request, 'manager/index.html', context)
@@ -214,7 +216,7 @@ class MedicalRecordCreate(CreateView):
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse_lazy('appointment_detail', kwargs={'pk': self.kwargs['pk']})    #redirect to the detailed view of the appointment after creating the medical record
+        return reverse_lazy('doctor_appointment_detail', kwargs={'pk': self.kwargs['pk']})    #redirect to the detailed view of the appointment after creating the medical record
 
 
 def patient_medical_records(request):
@@ -225,3 +227,11 @@ class MedicalRecordDetail(DetailView):
     model = MedicalRecord
     template_name = 'patient/medical_record_detail.html'
     context_object_name = 'record'
+
+class EditMedicalRecord(UpdateView):
+    model = MedicalRecord
+    form_class = MedicalRecordEditForm 
+    template_name = 'doctor/edit_medical_record_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('doctor_appointment_detail', kwargs={'pk': self.object.appointment.pk})
