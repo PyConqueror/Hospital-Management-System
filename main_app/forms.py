@@ -71,3 +71,13 @@ class MedicalRecordForm(forms.ModelForm):
     class Meta:
         model = MedicalRecord
         fields = ['diagnosis', 'treatment', 'prescriptions']
+
+class MedicalRecordEditForm(forms.ModelForm):
+    class Meta:
+        model = MedicalRecord
+        fields = ['diagnosis', 'treatment', 'prescriptions']
+        widgets = {
+            'diagnosis': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+            'treatment': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+            'prescriptions': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+        }
