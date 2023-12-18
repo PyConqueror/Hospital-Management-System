@@ -25,6 +25,37 @@
 </div>
 
 <div class="row">
+  <h2>Scheduled Appointments</h2>
+  {% for appointment in scheduled_appointments %}
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            {% if appointment.doctor %}
+              Dr. {{ appointment.doctor.name }} ({{ appointment.doctor.specialization }})
+            {% else %}
+              Pending Doctor Assignment
+            {% endif %}
+          </span>
+          {% if appointment.date and appointment.time %}
+            <p>Date and Time: {{ appointment.date|date:"Y-m-d" }} at {{ appointment.time|time:"H:i" }}</p>
+          {% else %}
+            <p>Date and Time: Pending Appointment Time</p>
+          {% endif %}
+          <p>Purpose: {{ appointment.purpose }}</p>
+          <p>Status: {{ appointment.status }}</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'manager_appointment_edit' appointment.id %}">Edit</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No Scheduled appointments.</p>
+  {% endfor %}
+</div>
+
+<div class="row">
   <h2>Past Appointments</h2>
   {% for appointment in past_appointments %}
     <div class="col s12 m6">
