@@ -1,9 +1,29 @@
 {% extends 'patient/base.html' %}
 {% block content %}
 
-<h1>PAST MEDICAL RECORDS</h1>
+<h1>Past Medical Records</h1>
 <hr>
 
-<p>See past medical records</p>
+<div class="row">
+  {% for record in medical_records %}
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Record Date: {{ record.date_of_record|date:"Y-m-d" }}</span>
+          <p>Diagnosis: {{ record.diagnosis }}</p>
+          <p>Treatment: {{ record.treatment }}</p>
+          {% if record.prescriptions %}
+            <p>Prescriptions: {{ record.prescriptions }}</p>
+          {% endif %}
+        </div>
+        <div class="card-action">
+            <a href="{% url 'medical_record_detail' record.id %}">More Details</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No past medical records found.</p>
+  {% endfor %}
+</div>
 
 {% endblock %}
