@@ -42,13 +42,8 @@ def doctor_dashboard(request):
             doctor=request.user.doctor_profile, 
             status='scheduled'
         ).order_by('-date')
-        completed_appointments = Appointment.objects.filter(
-            doctor=request.user.doctor_profile, 
-            status='completed'
-        ).order_by('-date')
         context = {
             'scheduled_appointments': scheduled_appointments,
-            'completed_appointments': completed_appointments,
         }
         return render(request, 'doctor/index.html', context)
     else:
@@ -235,3 +230,41 @@ class EditMedicalRecord(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('doctor_appointment_detail', kwargs={'pk': self.object.appointment.pk})
+    
+@login_required
+def doctor_patients(request):
+    if request.user.role == 'doctor': #route protection so only doctors can access
+        patients = Patient.objects.filter( # get the patients for the doctor
+            appointments__doctor=request.user.doctor_profile, 
+            appointments__status='completed'
+        ).distinct()
+
+        return render(request, 'doctor/patients.html', {'patients': patients})
+    else:
+        return redirect('dashboard')
+    
+class PatientDetail(DetailView):
+    model = Patient
+    template_name = 'doctor/patient_detail.html'
+    context_object_name = 'patient'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        patient = self.get_object()
+        context['appointments'] = Appointment.objects.filter(
+            patient=patient, 
+            doctor=self.request.user.doctor_profile,
+            status='completed'
+        )
+        return context
+    
+def doctor_completed_appointment(request):
+    if request.user.role == 'doctor':
+        completed_appointments = Appointment.objects.filter(
+            doctor=request.user.doctor_profile, 
+            status='completed'
+        ).order_by('-date')
+        context = {
+            'completed_appointments': completed_appointments,
+        }
+        return render(request, 'doctor/completed_appointments.html',context)
