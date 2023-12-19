@@ -53,14 +53,10 @@ def manager_dashboard(request):
     user_role = request.user.role
     if user_role == 'manager':
         appointment_requests = Appointment.objects.filter(status='pending').order_by('-date')
-        past_appointments = Appointment.objects.exclude(status='pending').order_by('-date')
         scheduled_appointments = Appointment.objects.filter(status='scheduled').order_by('-date')
-        doctors = Doctor.objects.all()
         context = {
             'appointment_requests': appointment_requests,
-            'past_appointments': past_appointments,
             'scheduled_appointments': scheduled_appointments,
-            'doctors': doctors,
         }
         return render(request, 'manager/index.html', context)
     else: 
@@ -144,6 +140,16 @@ class AppointmentDetail(DetailView):
 class DoctorAppointmentDetail(DetailView):
     model = Appointment
     template_name = 'appointments/doctor_appointment_detail.html'
+    context_object_name = 'appointment'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['medical_records'] = self.object.appointment_medical_records.all()
+        return context
+    
+class ManagerAppointmentDetail(DetailView):
+    model = Appointment
+    template_name = 'appointments/manager_appointment_detail.html'
     context_object_name = 'appointment'
 
     def get_context_data(self, **kwargs):
@@ -268,3 +274,14 @@ def doctor_completed_appointment(request):
             'completed_appointments': completed_appointments,
         }
         return render(request, 'doctor/completed_appointments.html',context)
+
+def manager_past_appointment(request):
+        user_role = request.user.role
+        if user_role == 'manager':
+            past_appointments = Appointment.objects.exclude(status='pending').order_by('-date')
+            context = {
+            'past_appointments': past_appointments,
+            }
+            return render(request, 'manager/past_appointment.html', context)
+        else: 
+            return redirect('dashboard')
