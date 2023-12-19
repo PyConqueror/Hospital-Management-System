@@ -19,7 +19,9 @@
                     <li><a href="{% url 'doctor_dashboard' %}" class="left brand-logo">&nbsp;&nbsp;🏥⚕️ Hospital Management System </a></li>
                 </ul>
                 <ul class="right">
-                    <li><a href="{% url 'doctor_dashboard' %}"> Main</a></li>
+                    <li><a href="{% url 'doctor_dashboard' %}">Main</a></li>
+                    <li><a href="{% url 'completed_appoinments' %}">Completed Appointments</a></li>
+                    <li><a href="{% url 'doctor_patients' %}">My Patients</a></li>
                     <li>
                         <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}

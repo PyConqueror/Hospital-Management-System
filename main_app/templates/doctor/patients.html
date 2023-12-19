@@ -1,0 +1,24 @@
+{% extends 'doctor/base.html' %}
+{% block content %}
+
+<h1>My Patients</h1>
+<hr>
+
+<div class="row">
+    {% for patient in patients %}
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{{ patient.name }}</span>
+                </div>
+                <div class="card-action">
+                    <a href="{% url 'patient_detail' patient.id %}">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No patients found.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
