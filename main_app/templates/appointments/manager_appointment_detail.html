@@ -1,0 +1,29 @@
+{% extends 'manager/base.html' %}
+
+{% block content %}
+  <h2>Appointment Detail</h2>
+  <p>Patient: {{ appointment.patient.name }}</p>
+  <p>Date: {{ appointment.date }}</p>
+  <p>Time: {{ appointment.time }}</p>
+  <p>Purpose: {{ appointment.purpose }}</p>
+  <p>Status: {{ appointment.status }}</p>
+  <h2>Medical Records for this Appointment:</h2>
+  <div class="row">
+    {% for record in medical_records %}
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Record Date: {{ record.date_of_record|date:"Y-m-d" }}</span>
+            <p>Diagnosis: {{ record.diagnosis }}</p>
+            <p>Treatment: {{ record.treatment }}</p>
+            {% if record.prescriptions %}
+              <p>Prescriptions: {{ record.prescriptions }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No medical records found for this appointment.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
