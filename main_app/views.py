@@ -328,9 +328,11 @@ def manage_doctors(request):
     if request.user.role == 'manager':
         pending_doctors = Doctor.objects.filter(status='pending')
         approved_doctors = Doctor.objects.filter(status='valid')
+        rejected_doctors = Doctor.objects.filter(status='rejected').order_by('name')
         context = {
         'pending_doctors': pending_doctors,
         'approved_doctors': approved_doctors,
+        'rejected_doctors': rejected_doctors
         }
         return render(request, 'manager/manage_doctors.html', context)
     else:
