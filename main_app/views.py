@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.generic.edit import CreateView
 from django.views.generic import DetailView, UpdateView
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -17,7 +18,14 @@ def home(request):
 def set_dashboard(request):
     user_role = request.user.role
     if user_role == 'doctor':
-        return redirect('doctor_dashboard')
+        doctor = Doctor.objects.get(user=request.user)
+        if doctor.status == 'pending':
+            messages.error(request, 'Your account is still pending, please contact manager for account update.')
+            return redirect('login') 
+        elif doctor.status == 'rejected':
+            messages.error(request, 'Your account is rejected / banned from logging in, please contact manager.')
+            return redirect('login')
+        return redirect('doctor_dashboard') 
     elif user_role == 'patient':
         return redirect('patient_dashboard')
     elif user_role == 'manager':
