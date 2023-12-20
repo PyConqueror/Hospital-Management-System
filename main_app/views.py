@@ -8,7 +8,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Patient, Doctor, Appointment, MedicalRecord
-from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm, AppointmentEditForm, AppointmentStatusUpdateForm, MedicalRecordForm, MedicalRecordEditForm
+from .forms import PatientSignUpForm, DoctorSignUpForm, AppointmentRequestForm, PatientProfileForm, AppointmentEditForm, AppointmentStatusUpdateForm, MedicalRecordForm, MedicalRecordEditForm, DoctorStatusForm
 
 def home(request):
     return render(request, 'home.html')
@@ -315,3 +315,33 @@ def search_patients(request):
         return JsonResponse(data, safe=False)
     else:
         return redirect('dashboard')
+    
+def manage_doctors(request):
+    if request.user.role == 'manager':
+        pending_doctors = Doctor.objects.filter(status='pending')
+        approved_doctors = Doctor.objects.filter(status='valid')
+        context = {
+        'pending_doctors': pending_doctors,
+        'approved_doctors': approved_doctors,
+        }
+        return render(request, 'manager/manage_doctors.html', context)
+    else:
+        return redirect('dashboard') 
+
+class DoctorStatusUpdate(UpdateView):
+    model = Doctor
+    form_class = DoctorStatusForm
+    template_name = 'manager/edit_doctor_status_form.html'
+    context_object_name = 'doctor'
+
+    def get_success_url(self):
+        return reverse_lazy('manage_doctors')
+    
+class DoctorDetail(DetailView):
+    model = Doctor
+    template_name = 'manager/doctor_detail.html'
+    context_object_name = 'doctor'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
