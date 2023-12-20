@@ -81,3 +81,8 @@ class MedicalRecordEditForm(forms.ModelForm):
             'treatment': forms.Textarea(attrs={'class': 'materialize-textarea'}),
             'prescriptions': forms.Textarea(attrs={'class': 'materialize-textarea'}),
         }
+
+class DoctorStatusForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields = ['status']
