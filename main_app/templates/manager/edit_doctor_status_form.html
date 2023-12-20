@@ -1,0 +1,20 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+
+<div class="container">
+    <h1>Edit Doctor Status</h1>
+    <hr>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Update Status</button>
+    </form>
+</div>
+
+<script>
+    const selectEl = document.getElementById('id_status');
+    M.FormSelect.init(selectEl);
+</script>
+
+{% endblock %}

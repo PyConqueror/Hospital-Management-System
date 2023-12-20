@@ -22,6 +22,7 @@
                     <li><a href="{% url 'manager_dashboard' %}"> Appointments</a></li>
                     <li><a href="{% url 'manager_past_appointment' %}"> Past Appointments</a></li>
                     <li><a href="{% url 'all_patients' %}"> Search Patients</a></li>
+                    <li><a href="{% url 'manage_doctors' %}"> Manage Doctors</a></li>
                     <li>
                         <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}

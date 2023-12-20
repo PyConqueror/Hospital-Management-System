@@ -1,0 +1,27 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+
+<div class="container">
+    <h1>Doctor Profile</h1>
+    <hr>
+
+    <div class="doctor-profile">
+        <h2>Personal Information</h2>
+        <p><strong>Name:</strong> {{ doctor.name }}</p>
+        <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+        <p><strong>Years of Experience:</strong> {{ doctor.years_of_experience }}</p>
+        <p><strong>Email:</strong> {{ doctor.user.email }}</p>
+
+        <h2>Contact Information</h2>
+        <p>{{ doctor.contact_information }}</p>
+
+        <h2>Status</h2>
+        <p>{{ doctor.get_status_display }}</p>
+        
+        <div class="actions">
+            <a href="{% url 'edit_doctor_status' doctor.id %}" class="btn">Edit Status</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
