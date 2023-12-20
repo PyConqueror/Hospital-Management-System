@@ -1,4 +1,6 @@
 from django.urls import reverse_lazy
+from django.core import serializers
+from django.http import JsonResponse
 from django.utils import timezone
 from django.views.generic.edit import CreateView
 from django.views.generic import DetailView, UpdateView
@@ -264,6 +266,20 @@ class PatientDetail(DetailView):
         )
         return context
     
+class ManagerPatientDetail(DetailView):
+    model = Patient
+    template_name = 'manager/patient_detail.html'
+    context_object_name = 'patient'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        patient = self.get_object()
+        context['appointments'] = Appointment.objects.filter(
+            patient=patient, 
+            status='completed'
+        )
+        return context
+    
 def doctor_completed_appointment(request):
     if request.user.role == 'doctor':
         completed_appointments = Appointment.objects.filter(
@@ -285,3 +301,17 @@ def manager_past_appointment(request):
             return render(request, 'manager/past_appointment.html', context)
         else: 
             return redirect('dashboard')
+
+def all_patients(request):
+    if request.user.role == 'manager':
+        return render(request, 'manager/all_patients.html')
+
+def search_patients(request):
+    if request.user.role == 'manager':
+        query = request.GET.get('q', '')
+        patients = Patient.objects.filter(name__icontains=query)
+        data = serializers.serialize('json', patients)
+        print(data)
+        return JsonResponse(data, safe=False)
+    else:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)

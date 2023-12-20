@@ -1,4 +1,4 @@
-{% extends 'doctor/base.html' %}
+{% extends 'manager/base.html' %}
 {% block content %}
 
 
@@ -26,8 +26,7 @@
           <p>Status: {{ appointment.status }}</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'medical_record_create' appointment.pk %}">Submit Medical Record</a>
-          <a href="{% url 'doctor_appointment_detail' appointment.pk %}">View Details</a>
+          <a href="{% url 'manager_appointment_detail' appointment.pk %}">View Details</a>
         </div>
       </div>
     </div>

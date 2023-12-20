@@ -1,0 +1,44 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+
+<div class="section">
+    <h1>Search Patients</h1>
+    <input type="text" id="searchBox" placeholder="Search patients..." autocomplete="off" onkeyup="searchPatients()">
+    <div id="patientList" class="row">
+    </div>
+</div>
+
+<script>
+function searchPatients() {
+    var query = document.getElementById('searchBox').value;
+    if(query.length < 2) {  //start searching after at least 2 characters have been typed
+        return;  //exit the function if the query is too short
+    }
+    fetch(`{% url 'search_patients' %}?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            var patients = JSON.parse(data);
+            var patientListDiv = document.getElementById('patientList');
+            patientListDiv.innerHTML = '';  //clear previous results
+            patients.forEach(patient => {
+                var patientCard = `
+                    <div class="col s12 m4">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">${patient.fields.name}</span>
+                                <!-- Additional patient details -->
+                            </div>
+                            <div class="card-action">
+                                <a href="/manager/patient/${patient.pk}/">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                patientListDiv.innerHTML += patientCard;  //add new result
+            });
+        })
+    }
+
+</script>
+
+{% endblock %}
