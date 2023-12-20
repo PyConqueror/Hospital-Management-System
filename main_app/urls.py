@@ -26,7 +26,10 @@ urlpatterns = [
     path('manager/search_patients/', views.search_patients, name='search_patients'),
     path('manager/all_patients/', views.all_patients, name='all_patients'),
     path('manager/patient/<int:pk>/', views.ManagerPatientDetail.as_view(), name='manager_patient_detail'),
-    # path('manager/manage_doctors/', views.manage_doctors, name='manage_doctors'),
+    path('manager/manage_doctors/', views.manage_doctors, name='manage_doctors'),
+    path('manager/doctor_detail/<int:pk>/', views.DoctorDetail.as_view(), name='doctor_detail'),
+    path('manager/doctor/<int:pk>/edit_status/', views.DoctorStatusUpdate.as_view(), name='edit_doctor_status'),
+
     # path('manager/appointment_requests/', views.appointment_requests, name='appointment_requests'),
     path('signup/patient/', views.patient_signup, name='patient_signup'),
     path('signup/doctor/', views.doctor_signup, name='doctor_signup'),
