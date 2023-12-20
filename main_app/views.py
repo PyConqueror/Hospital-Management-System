@@ -314,4 +314,4 @@ def search_patients(request):
         print(data)
         return JsonResponse(data, safe=False)
     else:
-        return JsonResponse({'error': 'Unauthorized'}, status=401)
+        return redirect('dashboard')
