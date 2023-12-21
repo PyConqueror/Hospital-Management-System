@@ -49,9 +49,9 @@ class PatientProfileForm(forms.ModelForm):
 
 class AppointmentEditForm(forms.ModelForm):
     doctor = forms.ModelChoiceField(
-        queryset=Doctor.objects.all(),
+        queryset=Doctor.objects.none(), 
         label="Doctor",
-        to_field_name="id", 
+        to_field_name="id",
     )
 
     class Meta:
@@ -60,6 +60,7 @@ class AppointmentEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AppointmentEditForm, self).__init__(*args, **kwargs)
+        self.fields['doctor'].queryset = Doctor.objects.filter(status='valid')
         self.fields['doctor'].label_from_instance = lambda obj: f"Dr. {obj.name} ({obj.specialization})"
 
 class AppointmentStatusUpdateForm(forms.ModelForm):
