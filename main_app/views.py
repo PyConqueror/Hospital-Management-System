@@ -115,8 +115,7 @@ def doctor_signup(request):
                 contact_information=form.cleaned_data.get('contact_information')
             )
             doctor.save()
-            login(request, user)
-            return redirect('doctor_dashboard')
+            return redirect('login')
         else:
             error_message = 'Invalid sign up - try again'
     else:
