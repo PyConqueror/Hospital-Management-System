@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-sm@7(&ptt40ymoh)_f=vp_6+xkyg*83845!#chk!fsa7jdi)-o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -74,6 +75,8 @@ WSGI_APPLICATION = 'HospitalManagementSystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+import django_heroku
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -81,6 +84,7 @@ DATABASES = {
     }
 }
 
+django_heroku.settings(locals())
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
