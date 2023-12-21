@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<main class="container">
 <h1>Log In</h1>
 
-<form action="{% url 'login' %}" method="POST">
+<form class="form-wrapper" action="{% url 'login' %}" method="POST">
   {% csrf_token %}
   {{ form.as_p }}
   <input type="hidden" name="next" value="{{ next }}">
   <button type="submit" class="btn">Log In</button>
 </form>
+</main>
 
 {% if messages %}
   <ul class="messages">

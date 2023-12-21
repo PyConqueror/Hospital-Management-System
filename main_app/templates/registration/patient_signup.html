@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<main class="container">
 <h1>Patient Sign Up</h1>
 
 <p class="red-text">{{ error_message }}</p>
 
-<form action="{% url 'patient_signup' %}" method="POST">
+<form class="form-wrapper" action="{% url 'patient_signup' %}" method="POST">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="btn">Sign Up</button>
 </form>
+</main>
 <script>
   const dateElement = document.getElementById('id_date_of_birth');
   M.Datepicker.init(dateElement, {
