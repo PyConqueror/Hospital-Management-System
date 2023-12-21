@@ -5,15 +5,21 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 main {
     flex: 1;
 }
 
+main > h1 {
+    text-align: center;
+}
+
 .nav-wrapper {
-    background: linear-gradient(to right, #4dabf7, #00acc1); /* Blue gradient */
-    padding: 0 20px; 
+    background: linear-gradient(to right, #9be7ff, #64b5f6); 
 }
 
 .brand-logo {
@@ -30,8 +36,8 @@ main {
 }
 
 .page-footer {
-    background: linear-gradient(to right, #4db6ac, #00897b); /* Green gradient */
     color: white;
+    background: linear-gradient(to right, #81c784, #4db6ac);
     padding: 10px 20px; 
 }
 
@@ -52,7 +58,7 @@ main {
 
 .card:hover {
     transform: translateY(-5px); 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.12); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card-content {
@@ -70,7 +76,7 @@ main {
     z-index: 0;
     margin: -20px; 
     border-radius: inherit; 
-    background: linear-gradient(to right, #4dabf7, #00acc1); /* Blue gradient */
+    background: linear-gradient(to right, #4dabf7, #00acc1); 
     opacity: 0.1;
 }
 
@@ -103,10 +109,11 @@ main {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    color: black;
 }
 
 input[type="submit"] {
-    background: linear-gradient(to right, #4dabf7, #00acc1); /* Blue gradient */ 
+    background: linear-gradient(to right, #4dabf7, #00acc1); 
     color: white;
     border: none;
     font-size: 1rem;
@@ -125,7 +132,7 @@ input[type="submit"]:hover, input[type="submit"]:focus {
 }
 
 button {
-    background: linear-gradient(to right, #4db6ac, #00897b); /* Green gradient */ 
+    background: linear-gradient(to right, #4db6ac, #00897b); 
     color: white;
     border: none;
     font-size: 1rem;
@@ -144,7 +151,7 @@ button:hover {
 }
 
 .datepicker-modal {
-    background-image:linear-gradient(to right, #4db6ac, #00897b); /* Green gradient */
+    background-image:linear-gradient(to right, #4db6ac, #00897b);
     border-radius: 25px ;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3) ;
     padding: 10px;
@@ -167,3 +174,39 @@ button:hover {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 15px;
 }
+
+.hero {
+    background: url('/static/images/Landing.png') no-repeat center center fixed;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+  }
+  
+  .hero-content {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4rem; 
+    border-radius: 15px; 
+    max-width: 800px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px); 
+  }
+  
+  .hero-content > h1 {
+    font-size: 3rem; 
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-content > p {
+    font-size: 1.3rem;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
+    line-height: 1.7; 
+  }
+
