@@ -160,28 +160,35 @@ button:hover {
     justify-content: center;
     text-align: center;
     color: white;
-  }
+}
   
-  .hero-content {
+.hero-content {
     background: rgba(0, 0, 0, 0.6);
     padding: 4rem; 
     border-radius: 15px; 
     max-width: 800px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px); 
-  }
+}
   
-  .hero-content > h1 {
+.hero-content > h1 {
     font-size: 3rem; 
     color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
     margin-bottom: 1.5rem;
-  }
+}
   
-  .hero-content > p {
+.hero-content > p {
     font-size: 1.3rem;
     color: white;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
     line-height: 1.7; 
-  }
+}
+
+ul.messages {
+    text-align: center;
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+}
 
