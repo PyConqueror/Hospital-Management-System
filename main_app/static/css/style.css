@@ -20,6 +20,7 @@ main > h1 {
 
 .nav-wrapper {
     background: linear-gradient(to right, #9be7ff, #64b5f6); 
+    padding-right: 10px;
 }
 
 .brand-logo {
