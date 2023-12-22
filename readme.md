@@ -14,22 +14,22 @@ The Hospital Management System (HMS) is a comprehensive and integrated software 
 
 ## Features
 
-### For Patients
-- Securely view and edit personal health profiles.
-- Schedule and manage appointments with ease.
-- Access comprehensive medical records and history provided by healthcare professionals.
+### As a Patient
+- View and update personal and medical information.
+- Request appointments.
+- Access medical records submitted by doctors.
 
-### For Hospital Management
-- Monitor and optimize hospital administrative operations.
-- Review, assign, and manage patient appointment requests.
-- Streamline the approval process for doctor's accounts.
-- Implement advanced patient search capabilities to enhance patient management.
+### As a Manager
+- Oversee hospital operations and staff management.
+- Assign time and doctors to appointment requests by patients.
+- Manage doctors (Approve/Reject accounts).
+- Search for patients and access their records.
 
-### For Doctors
-- Access a centralized database of patient medical records.
-- Manage daily appointments and patient flow efficiently.
-- Utilize digital prescription tools to prescribe and manage medications.
-- Track and review treatment history of patients under their care.
+### As Doctors
+- Access and update patient medical records.
+- View and manage appointments.
+- Prescribe medications.
+- View patients treated by the doctor.
 
 ## Screenhots
 ![Website Image](./main_app/static/images/Screenshot.png)
